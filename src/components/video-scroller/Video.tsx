@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface VideoProps {
   videoId: string;
@@ -7,9 +7,37 @@ interface VideoProps {
 
 export default function Video({ videoId }: VideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleClick = () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        if (entry.isIntersecting) {
+          video.play().catch(() => {}); // Safe autoplay attempt
+        } else {
+          video.pause();
+        }
+      },
+      {
+        threshold: 0.6, // 60% visible = active
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
+  const handlePause = () => {
     const vid = videoRef.current;
     if (!vid) return;
 
@@ -23,7 +51,7 @@ export default function Video({ videoId }: VideoProps) {
   return (
     <div
       className="h-screen snap-center flex justify-center items-center overflow-hidden"
-      onClick={handleClick}
+      ref={containerRef}
     >
       <video
         ref={videoRef}
@@ -32,7 +60,7 @@ export default function Video({ videoId }: VideoProps) {
         playsInline
         autoPlay
         loop
-        muted
+        onClick={handlePause}
       >
         <source src="/example.mp4" type="video/mp4" />
       </video>
