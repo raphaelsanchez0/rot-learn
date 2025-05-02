@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
 
 interface VideoProps {
-  videoId: string;
+  termID: string;
 }
 
-export default function Video({ videoId }: VideoProps) {
+export default function Video({ termID }: VideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +55,9 @@ export default function Video({ videoId }: VideoProps) {
       className="h-screen snap-center flex justify-center items-center overflow-hidden"
       ref={containerRef}
     >
+      <div className="fixed bottom-6 right-6 z-2">
+        <QuestionDrawer termID={termID} />
+      </div>
       <video
         ref={videoRef}
         className="max-h-full w-full object-contain"
