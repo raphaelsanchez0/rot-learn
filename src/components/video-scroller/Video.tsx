@@ -5,9 +5,10 @@ import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
 
 interface VideoProps {
   flashcard: FlashCard;
+  setActiveFlashcard: (flashcard: FlashCard) => void;
 }
 
-export default function Video({ flashcard }: VideoProps) {
+export default function Video({ flashcard, setActiveFlashcard }: VideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -18,14 +19,13 @@ export default function Video({ flashcard }: VideoProps) {
         if (!video) return;
 
         if (entry.isIntersecting) {
-          video.play().catch(() => {}); // Safe autoplay attempt
+          video.play().catch(() => {});
+          setActiveFlashcard(flashcard); // Notify parent
         } else {
           video.pause();
         }
       },
-      {
-        threshold: 0.6, // 60% visible = active
-      }
+      { threshold: 0.6 }
     );
 
     if (containerRef.current) {
@@ -37,7 +37,7 @@ export default function Video({ flashcard }: VideoProps) {
         observer.unobserve(containerRef.current);
       }
     };
-  }, []);
+  }, [flashcard.id, setActiveFlashcard]);
 
   const handlePause = () => {
     const vid = videoRef.current;
@@ -55,9 +55,6 @@ export default function Video({ flashcard }: VideoProps) {
       className="h-screen snap-center flex justify-center items-center overflow-hidden"
       ref={containerRef}
     >
-      <div className="fixed bottom-6 right-6 z-2">
-        <QuestionDrawer flashcard={flashcard} />
-      </div>
       <video
         ref={videoRef}
         className="max-h-full w-full object-contain"

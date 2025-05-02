@@ -27,7 +27,7 @@ export function QuestionDrawer({ flashcard }: QuestionDrawerProps) {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Did you know {flashcard.term}</DrawerTitle>
+          <DrawerTitle>{flashcard.term}</DrawerTitle>
         </DrawerHeader>
 
         <DrawerFooter>

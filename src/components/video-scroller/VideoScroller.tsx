@@ -1,5 +1,7 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Video from "./Video";
+import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
 const flashcards: FlashCard[] = [
   {
     src: "example.mp4",
@@ -30,14 +32,27 @@ const flashcards: FlashCard[] = [
 ];
 
 export default function VideoScroller() {
+  const [activeFlashcard, setActiveFlashcard] = useState<FlashCard | null>(
+    null
+  );
+
   return (
     <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
       {/* <Video questionID="example" />
       <Video questionID="example" />
       <Video questionID="example" /> */}
       {flashcards.map((flashcard, index) => (
-        <Video key={index} flashcard={flashcard} />
+        <Video
+          key={index}
+          flashcard={flashcard}
+          setActiveFlashcard={setActiveFlashcard}
+        />
       ))}
+      {activeFlashcard && (
+        <div className="fixed bottom-6 right-6 z-2">
+          <QuestionDrawer flashcard={activeFlashcard} />
+        </div>
+      )}
     </div>
   );
 }
