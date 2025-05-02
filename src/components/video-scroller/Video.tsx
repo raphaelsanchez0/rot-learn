@@ -4,10 +4,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
 
 interface VideoProps {
-  termID: string;
+  flashcard: FlashCard;
 }
 
-export default function Video({ termID }: VideoProps) {
+export default function Video({ flashcard }: VideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -56,7 +56,7 @@ export default function Video({ termID }: VideoProps) {
       ref={containerRef}
     >
       <div className="fixed bottom-6 right-6 z-2">
-        <QuestionDrawer termID={termID} />
+        <QuestionDrawer flashcard={flashcard} />
       </div>
       <video
         ref={videoRef}

@@ -14,21 +14,20 @@ import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
 interface QuestionDrawerProps {
-  termID: string;
+  flashcard: FlashCard;
 }
 
-export function QuestionDrawer({ termID }: QuestionDrawerProps) {
+export function QuestionDrawer({ flashcard }: QuestionDrawerProps) {
   return (
     <Drawer>
       <DrawerTrigger className="absolute bottom-10 right-10 bg-green-500 w-10 h-10 rounded-full  ">
         <Avatar className="flex items-center justify-center w-full h-full">
           <Check />
-          <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Did you know it?</DrawerTitle>
+          <DrawerTitle>Did you know {flashcard.term}</DrawerTitle>
         </DrawerHeader>
 
         <DrawerFooter>
