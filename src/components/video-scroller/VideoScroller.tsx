@@ -3,7 +3,7 @@ import Video from "./Video";
 
 export default function VideoScroller() {
   return (
-    <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
+    <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
       <Video videoId="example" />
       <Video videoId="example" />
       <Video videoId="example" />
