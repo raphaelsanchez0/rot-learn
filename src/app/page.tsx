@@ -1,6 +1,16 @@
 import VideoScroller from "@/components/video-scroller/VideoScroller";
 import Image from "next/image";
 
+/**
+ * Home Page (Main Entry Point)
+ * ----------------------------
+ * This is the root page of the application located at `/`.
+ *
+ * It renders the `VideoScroller` component, which dynamically loads and
+ * presents flashcards as scrollable text-to-speech interactions.
+ *
+ * This serves as the primary interactive interface for the user.
+ */
 export default function Home() {
   return (
     // <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

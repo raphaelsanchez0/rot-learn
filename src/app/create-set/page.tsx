@@ -7,6 +7,43 @@ import { useRouter } from "next/navigation";
 import { Router } from "next/router";
 import React, { useState } from "react";
 
+/**
+ * CreateSetPage Component
+ * -----------------------
+ * This client-side React component allows users to create a new flashcard set.
+ *
+ * Features:
+ * - Users can input a set name and dynamically add or remove flashcards.
+ * - Each flashcard contains a "term" and a "definition".
+ * - On submission, the set and its flashcards are sent to the `/api/sets/create` endpoint.
+ * - Upon successful creation, the user is redirected to `/sets-client`.
+ *
+ * Technologies:
+ * - React (useState, useEffect)
+ * - Next.js App Router (`useRouter`, `Link`)
+ * - Custom UI components (Button, Card, Input)
+ *
+ * API:
+ * - POST /api/sets/create
+ *   Request Body:
+ *     {
+ *       name: string,
+ *       flashcards: Array<{
+ *         term: string,
+ *         definition: string
+ *       }>
+ *     }
+ *   Response:
+ *     201 Created – returns the created set with its flashcards
+ *     400 Bad Request – if the request body is invalid
+ *     500 Internal Server Error – if server-side creation fails
+ *
+ * Notes:
+ * - Validation is done client-side to ensure the set has a name
+ *   and at least one valid flashcard before making the API call.
+ * - Uses optimistic navigation via Next.js's `useRouter().push()` on success.
+ */
+
 export default function CreateSetPage() {
   const [setName, setSetName] = useState("");
   const [flashCards, setFlashCards] = useState([{ term: "", definition: "" }]);

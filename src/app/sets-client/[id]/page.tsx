@@ -6,6 +6,48 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import React, { useEffect, useState } from "react";
+/**
+ * EditSetPage Component
+ * ---------------------
+ * This client-side React component allows users to edit an existing flashcard set.
+ *
+ * Features:
+ * - Fetches an existing set using the set ID from the URL via Next.js `useParams`.
+ * - Populates the form with the existing set name and its flashcards.
+ * - Allows the user to modify the set name, update flashcards, or remove them.
+ * - Enables the user to add new flashcards dynamically.
+ * - On submission, the updated data is sent to `/api/sets/[id]` using a PUT request.
+ * - On success, the user is redirected back to the main sets page (`/sets-client`).
+ *
+ * Technologies Used:
+ * - React (useState, useEffect)
+ * - Next.js App Router (`useRouter`, `useParams`)
+ * - Custom UI components: Button, Input, Card
+ *
+ * API:
+ * - GET /api/sets/:id
+ *   - Fetches a single flashcard set by its numeric ID
+ *   - Includes the associated flashcards
+ *
+ * - PUT /api/sets/:id
+ *   Request Body:
+ *     {
+ *       name: string,
+ *       flashcards: Array<{
+ *         term: string,
+ *         definition: string
+ *       }>
+ *     }
+ *   Response:
+ *     200 OK – Returns the updated set
+ *     400 Bad Request – If name or flashcards are invalid
+ *     500 Internal Server Error – If update fails server-side
+ *
+ * Notes:
+ * - All form validation is handled on the client side.
+ * - The component depends on the `id` param being available in the route `/sets-client/[id]/edit`.
+ * - Audio feedback or accessibility features can be added to enhance usability for diverse users.
+ */
 
 export default function EditSetPage() {
   const [setName, setSetName] = useState("");

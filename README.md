@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📘 Rot-Learn
 
-## Getting Started
+**Rot-Learn** is a flashcard learning web app that combines scrolling UI, Text-to-Speech (TTS), and spaced repetition mechanics to help users passively study topics while engaging with modern formats like TikTok-style vertical interfaces.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📂 Folder Structure
+
+app/
+├── api/
+│ ├── flashcards/ # Flashcard-related endpoints (future)
+│ ├── sets/ # Set CRUD endpoints
+│ │ ├── [id]/route.ts # GET / PUT individual sets
+│ │ ├── create/route.ts # POST create new set
+│ │ └── route.ts # GET all sets
+│ └── speak/route.ts # POST to generate speech from text (Speechify)
+├── create-set/page.tsx # Page to create a new flashcard set
+├── sets-client/
+│ ├── [id]/page.tsx # Page to edit a flashcard set
+│ └── page.tsx # Homepage for browsing flashcard sets
+├── page.tsx # Entry point: flashcard scroller
+
+## Setup
+
+Install
+
+```
+git clone https://github.com/yourusername/rot-learn.git
+cd rot-learn
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Make a .env file with this in it, make a speechify api key. For the database, go to Supabase and make a free account and trial database as you see here.
+https://www.youtube.com/watch?v=BgifvZIRPPA
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+DATABASE_URL=postgresql://username:password@localhost:5432/yourdb
+SPEECHIFY_API_KEY=your_speechify_api_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Migrate Prisma
 
-## Learn More
+```
+npx prisma migrate dev --name init
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Now open in the environment it tells you to!
