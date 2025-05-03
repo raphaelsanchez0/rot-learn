@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Router } from "next/router";
 import React, { useState } from "react";
 
 export default function CreateSetPage() {
   const [setName, setSetName] = useState("");
   const [flashCards, setFlashCards] = useState([{ term: "", definition: "" }]);
+  const router = useRouter();
 
   const handleFlashCardChange = (
     index: number,
@@ -21,6 +24,45 @@ export default function CreateSetPage() {
 
   const addCard = () => {
     setFlashCards([...flashCards, { term: "", definition: "" }]);
+  };
+
+  const handleSubmit = async () => {
+    if (!setName.trim()) {
+      alert("Set name is required.");
+      return;
+    }
+
+    const validCards = flashCards.filter(
+      (card) => card.term.trim() && card.definition.trim()
+    );
+
+    if (validCards.length === 0) {
+      alert("At least one valid flashcard is required.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/sets/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: setName,
+          flashcards: validCards,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to create set");
+
+      const data = await res.json();
+      //router.push(`/sets/${data.id}`);
+      router.push("/sets");
+      Router;
+    } catch (err) {
+      console.error(err);
+      alert("Error creating set.");
+    }
   };
 
   return (
@@ -78,6 +120,9 @@ export default function CreateSetPage() {
         <div className="flex items-center justify-between">
           <Button onClick={addCard} variant="outline">
             + Add Another Card
+          </Button>
+          <Button onClick={handleSubmit} variant="outline">
+            Create Set
           </Button>
         </div>
       </div>
