@@ -3,14 +3,33 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Router } from "next/router";
-import React, { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-export default function CreateSetPage() {
+import React, { useEffect, useState } from "react";
+
+export default function EditSetPage() {
   const [setName, setSetName] = useState("");
   const [flashCards, setFlashCards] = useState([{ term: "", definition: "" }]);
   const router = useRouter();
+
+  const params = useParams();
+  const setId = params.id;
+
+  useEffect(() => {
+    const fetchSet = async () => {
+      if (!setId) return;
+      try {
+        const res = await fetch(`/api/sets/${setId}`);
+        const data = await res.json();
+        setSetName(data.name);
+        setFlashCards(data.flashcards ?? []);
+      } catch (error) {
+        console.error("Failed to load set", error);
+      }
+    };
+
+    fetchSet();
+  }, [setId]);
 
   const handleFlashCardChange = (
     index: number,
@@ -27,6 +46,7 @@ export default function CreateSetPage() {
   };
 
   const handleSubmit = async () => {
+    if (!setId) return;
     if (!setName.trim()) {
       alert("Set name is required.");
       return;
@@ -42,8 +62,8 @@ export default function CreateSetPage() {
     }
 
     try {
-      const res = await fetch("/api/sets/create", {
-        method: "POST",
+      const res = await fetch(`/api/sets/${setId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -53,15 +73,12 @@ export default function CreateSetPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to create set");
+      if (!res.ok) throw new Error("Failed to update set");
 
-      const data = await res.json();
-      //router.push(`/sets/${data.id}`);
-      router.push("/sets");
-      Router;
+      router.push(`/sets-client/`);
     } catch (err) {
       console.error(err);
-      alert("Error creating set.");
+      alert("Error updating set.");
     }
   };
 
@@ -69,7 +86,7 @@ export default function CreateSetPage() {
     <div className="w-full p-4">
       <div className="flex items-center justify-between w-full">
         <div className="text-4xl font-bold leading-tight tracking-tighter ">
-          Create a new set
+          Edit set
         </div>
         <Link href="/sets-client">
           <Button variant="outline">Back</Button>
@@ -122,7 +139,7 @@ export default function CreateSetPage() {
             + Add Another Card
           </Button>
           <Button onClick={handleSubmit} variant="outline">
-            Create Set
+            Edit Set
           </Button>
         </div>
       </div>
