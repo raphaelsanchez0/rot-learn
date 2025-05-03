@@ -30,5 +30,4 @@ model Set{
   id Int @id @default(autoincrement())
   name String @db.VarChar(100)
   flashcards FlashCard[]
-
 }
