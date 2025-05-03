@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Video from "./Video";
 import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
+import { PrismaClient } from "@prisma/client/extension";
 const flashcards: FlashCard[] = [
   {
     src: "example.mp4",
@@ -32,9 +33,17 @@ const flashcards: FlashCard[] = [
 ];
 
 export default function VideoScroller() {
+  //const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeFlashcard, setActiveFlashcard] = useState<FlashCard | null>(
     null
   );
+
+  // useEffect(() => {
+  //   fetch("https://random-data-api.com/api/users/random_user")
+  //     .then((response) => response.json())
+  //     .then((data) => setFlashcards(data));
+  // }, []);
 
   return (
     <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
