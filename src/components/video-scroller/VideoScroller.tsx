@@ -1,58 +1,46 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Video from "./Video";
+import Video from "./Video"; // Adjust if path is different
 import { QuestionDrawer } from "../question-drawer/QuestionDrawer";
-import { PrismaClient } from "@prisma/client/extension";
-const flashcards: FlashCard[] = [
-  {
-    src: "example.mp4",
-    term: "Photosynthesis",
-    definition:
-      "The process by which green plants use sunlight to synthesize food.",
-    id: 1,
-    timesCorrect: 4,
-    attempts: 6,
-  },
-  {
-    src: "example.mp4",
-    term: "Mitosis",
-    definition: "A type of cell division that results in two daughter cells.",
-    id: 2,
-    timesCorrect: 2,
-    attempts: 5,
-  },
-  {
-    src: "example.mp4",
-    term: "Osmosis",
-    definition:
-      "The movement of water molecules through a semipermeable membrane.",
-    id: 3,
-    timesCorrect: 1,
-    attempts: 3,
-  },
-];
+import { useParams, useSearchParams } from "next/navigation";
 
 export default function VideoScroller() {
-  //const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("setId");
+
+  const [flashcards, setFlashcards] = useState<FlashCard[]>([]);
   const [activeFlashcard, setActiveFlashcard] = useState<FlashCard | null>(
     null
   );
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch("https://random-data-api.com/api/users/random_user")
-  //     .then((response) => response.json())
-  //     .then((data) => setFlashcards(data));
-  // }, []);
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchSet = async () => {
+      try {
+        const res = await fetch(`/api/sets/${id}`);
+        const data = await res.json();
+        setFlashcards(data.flashcards);
+      } catch (error) {
+        console.error("Failed to load flashcards", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSet();
+  }, [id]);
+
+  if (isLoading) {
+    return <div className="text-center p-10 text-xl">Loading...</div>;
+  }
 
   return (
     <div className="relative overflow-y-scroll snap-y snap-mandatory h-screen">
-      {/* <Video questionID="example" />
-      <Video questionID="example" />
-      <Video questionID="example" /> */}
-      {flashcards.map((flashcard, index) => (
+      {flashcards.map((flashcard) => (
         <Video
-          key={index}
+          key={flashcard.id}
           flashcard={flashcard}
           setActiveFlashcard={setActiveFlashcard}
         />

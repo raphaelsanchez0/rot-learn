@@ -29,7 +29,7 @@ export default function page() {
         </Link>
       </div>
       {sets.map((set) => (
-        <Link href={`/sets-client/${set.id}`} key={set.id}>
+        <Link href={`/?setId=${set.id}`} key={set.id}>
           <Card key={set.id}>
             <CardHeader>
               <CardTitle>{set.name}</CardTitle>

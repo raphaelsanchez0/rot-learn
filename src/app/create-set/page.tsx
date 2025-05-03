@@ -57,7 +57,7 @@ export default function CreateSetPage() {
 
       const data = await res.json();
       //router.push(`/sets/${data.id}`);
-      router.push("/sets");
+      router.push("/sets-client");
       Router;
     } catch (err) {
       console.error(err);
